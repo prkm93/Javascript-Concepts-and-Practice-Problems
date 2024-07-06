@@ -46,32 +46,32 @@ Response
 // Its basically a returned object to which we can attach callbacks, instead of passing callbacks into a function.
 // It eliminates the problem of callback hell and inversion of control which occurs in callback functions.
 
-function createOrder(cart) {
-  return new Promise((resolve, reject) => {
-    if (!validateCart(cart)) {
-      const err = new Error("Cart isn't valid");
-      reject(err);
-    }
-    const orderID = 12334;
-    if (orderID) {
-      setTimeout(() => {
-        resolve(orderID);
-      }, 3000);
-    }
-  });
-}
+// function createOrder(cart) {
+//   return new Promise((resolve, reject) => {
+//     if (!validateCart(cart)) {
+//       const err = new Error("Cart isn't valid");
+//       reject(err);
+//     }
+//     const orderID = 12334;
+//     if (orderID) {
+//       setTimeout(() => {
+//         resolve(orderID);
+//       }, 3000);
+//     }
+//   });
+// }
 
-function validateCart(cart) {
-  return true;
-}
+// function validateCart(cart) {
+//   return true;
+// }
 
-function proceedToPayment(orderId) {
-  return new Promise((resolve, reject) => {
-    resolve("payment successful");
-  });
-}
+// function proceedToPayment(orderId) {
+//   return new Promise((resolve, reject) => {
+//     resolve("payment successful");
+//   });
+// }
 
-const promise = createOrder(cart);
+// const promise = createOrder(cart);
 
 // promise
 //   .then((orderID) => {
@@ -85,16 +85,88 @@ const promise = createOrder(cart);
 // To only catch the error in the first promise, move the catch to just below the first promise
 
 // --- Catch doesn't catches error for the promises below it. Any .then defined below catch will definitely execute.
-promise
+// promise
+//   .then((orderID) => {
+//     console.log(orderID);
+//     // return orderID;
+//   })
+//   .catch((error) => console.log(error.message))
+//   .then((orderID) => proceedToPayment(orderID))
+//   .then((response) => console.log(response));
+
+// promise
+//   .then((orderID) => console.log(orderID))
+//   .catch((error) => console.log(error))
+//   .then(() => console.log("i will definitely execute even after catch"));
+
+// Exercise
+
+function createOrder(cart) {
+  return new Promise((resolve, reject) => {
+    if (!cart) {
+      let error = new Error("cart not found");
+      reject(error);
+    }
+    let orderID = "12452";
+    resolve(orderID);
+  });
+}
+
+function proceedToPayment(orderId) {
+  return new Promise((resolve, reject) => {
+    if (!orderId) {
+      let error = new Error("order Id not found");
+      reject(error);
+    }
+    let paymentInfo = "payment completed successfully";
+    resolve(paymentInfo);
+  });
+}
+
+function showOrderSummary(paymentInfo) {
+  return new Promise((resolve, reject) => {
+    if (!paymentInfo) {
+      let error = new Error("payment failed");
+      reject(error);
+    }
+    let orderSummary = "order is created";
+    resolve(orderSummary);
+  });
+}
+
+function updateWalletBalance(orderSummary) {
+  return new Promise((resolve, reject) => {
+    if (!orderSummary) {
+      let error = new Error("Order Summary not created");
+      reject(error);
+    }
+    let newWalletBalance = 405;
+    resolve(newWalletBalance);
+  });
+}
+
+createOrder(cart)
   .then((orderID) => {
     console.log(orderID);
-    // return orderID;
+    return orderID;
   })
-  .catch((error) => console.log(error.message))
-  .then((orderID) => proceedToPayment(orderID))
-  .then((response) => console.log(response));
+  .then((orderId) => {
+    return proceedToPayment(orderId);
+  })
+  .then((paymentInfo) => {
+    console.log(paymentInfo);
+    return showOrderSummary(paymentInfo);
+  })
+  .then((orderSummary) => {
+    console.log(orderSummary);
+    return updateWalletBalance(orderSummary);
+  })
+  .then((newBalance) => {
+    console.log(newBalance);
+    return newBalance;
+  })
+  .catch((error) => console.log(error));
 
-promise
-  .then((orderID) => console.log(orderID))
-  .catch((error) => console.log(error))
-  .then(() => console.log("i will definitely execute even after catch"));
+//prooceedToPayment
+//showOrderSummary
+//updateWallerBalance
