@@ -67,6 +67,7 @@
  *  - kind of all promise races, whichever finished first returns results
  *  - whichever settles first, whether the promise is success or failure, it will return the results.
  *  - it willn't wait for other promises to get settled
+ *  - whichever promise takes least time to finish (either success or failure), will return the result after finishing.
  */
 
 /**
@@ -91,4 +92,13 @@
  * Difference between race and any
  * - Race will return first promise irrespective of either success or failure
  * - .any will return only first success(resolved) settled success promise(not rejected promise)
+ */
+
+/**
+ *  ********* lingos in promise ***********
+ *
+ *  -- settled  ==> result of promise
+ *
+ *  ---- resolve, fulfilled, success --> All same
+ *  ---- reject, rejected, failure --> All same
  */
