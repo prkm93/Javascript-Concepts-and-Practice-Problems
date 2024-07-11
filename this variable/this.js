@@ -120,6 +120,40 @@ console.log(getMemberFullName()); // Outputs "Jane Smith"
 
 /***************** this inside arrow function ************/
 
-// this inside nested arrow function
+// arrow functions don't provide their own this bindings. It retains value of this from its enclosing lexical context.
 
-// this inside DOM
+const obj1 = {
+  b: 10,
+  y: () => {
+    console.log(this);
+  },
+};
+
+obj1.y(); // window object
+// arrow function doesn't provide its own binding. Value of this depends on enclosing lexical context.
+// Its enclosing context is obj which is in global space. so, value of this is window object.
+
+/*********** this inside nested arrow function ************/
+
+const obj3 = {
+  c: 30,
+  x: function () {
+    // enclosing lexical context
+    const y = () => {
+      console.log(this);
+    };
+    y();
+  },
+};
+
+obj3.x(); // logs obj3. Why - because enclosing lexical context of y is x function which is method of object and value of this inside x is obj3.
+//                So, value of this inside y will be object.
+
+/********** this inside DOM  ************/
+// Reference to HTML element
+
+function handleShow(item) {
+  console.log(item);
+  console.log(item.tagName);
+  console.log(item.innerHTML);
+}
