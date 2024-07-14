@@ -65,14 +65,3 @@ window.addEventListener("resize", optimisedFunction);
  *
  *  It depends on usecase what need to be used ? Debouncing or throttlong.
  */
-
-// function currying(a) {
-//   return function (b) {
-//     return b ? currying(a + b) : b;
-//   };
-// }
-
-const currying = (a) => (b) => b ? currying(a + b) : a;
-
-var total = currying(1)(2)(3)(4)();
-console.log(total);

@@ -8,4 +8,12 @@ function currying(a) {
   };
 }
 
-var total = currying(1)(2)(3);
+// with ES6
+const sum = (a) => (b) => b ? sum(a + b) : a;
+
+// without ES5
+function sum(a) {
+  return function (b) {
+    return b ? sum(a + b) : a;
+  };
+}
