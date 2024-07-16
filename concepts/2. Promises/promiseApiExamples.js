@@ -20,20 +20,20 @@ const p3 = new Promise((resolve, reject) => {
 });
 
 /******** Promise.all  ********/
-// Promise.all([p1, p2, p3])
-//   .then((result) => {
-//     console.log(result); // After 3s, [p1 success, p2 success, p3 success] , when all promise resolves
-//   })
-//   .catch((error) => {
-//     console.error(error); // when p2 rejects, p2 fail after 1s
-//   });
+Promise.all([p1, p2, p3])
+  .then((result) => {
+    console.log(result); // After 3s, [p1 success, p2 success, p3 success] , when all promise resolves
+  })
+  .catch((error) => {
+    console.error(error); // when p2 rejects, p2 fail after 1s
+  });
 
 /******* Promise.allSettled *******/
-// Promise.allSettled([p1, p2, p3])
-//   .then((result) => {
-//     console.log(result);
-//   })
-//   .catch((error) => console.error(error));
+Promise.allSettled([p1, p2, p3])
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => console.error(error));
 
 // -- success
 //   [ waited for all the promises to settle first, and then returned array with all the results
@@ -69,11 +69,11 @@ const p3 = new Promise((resolve, reject) => {
 
 /******* Promise.race *******/
 
-// Promise.race([p1, p2, p3])
-//   .then((result) => {
-//     console.log(result); // p2 success
-//   })
-//   .catch((error) => console.error(error));
+Promise.race([p1, p2, p3])
+  .then((result) => {
+    console.log(result); // p2 success
+  })
+  .catch((error) => console.error(error));
 
 /******** Promise.any *******/
 
