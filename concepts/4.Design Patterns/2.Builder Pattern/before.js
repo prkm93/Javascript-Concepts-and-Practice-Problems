@@ -1,6 +1,6 @@
 /**
- * Definition - Useful when object have many interlinking parts or many optional and required fields
- *
+ * Definition - Useful when object have many interlinking parts or many optional and required fields, then we can use builder pattern
+ * Useful for complex object having many fields , then Builder pattern can be used. Extract complex logic from constructor to Builder
  * https://github.com/WebDevSimplified/Design-Patterns/tree/master/Builder%20Pattern
  */
 
