@@ -1,4 +1,4 @@
-"use strict";
+// "use strict";
 /*************8 this in global space *************/
 
 this; // defined here will be global scoped
@@ -157,3 +157,90 @@ function handleShow(item) {
   console.log(item.tagName);
   console.log(item.innerHTML);
 }
+
+/************* Problems on this *************** */
+// Q - Create an object calculator
+
+let calculator = {
+  // your code
+  read() {
+    this.a = +prompt("a = ", 0);
+    this.b = +prompt("b = ", 0);
+  },
+  sum() {
+    return this.a + this.b;
+  },
+  mul() {
+    return this.a * this.b;
+  },
+};
+
+// calculator.read();
+// console.log(calculator.sum());
+// console.log(calculator.mul());
+
+// Q
+
+var length = 4;
+
+function callback() {
+  console.log(this.length);
+}
+
+var object = {
+  length: 5,
+  method(fn) {
+    fn();
+  },
+};
+
+object.method(callback);
+
+// output
+/*
+Since inside function method, callback will be nested function and will point to global object, and vallue of length in global is 4 
+*/
+
+// Q
+var length = 4;
+
+function callback() {
+  console.log(this.length);
+}
+
+var object = {
+  length: 5,
+  method() {
+    arguments[0]();
+  },
+};
+
+object.method(callback, 2, 3);
+
+/**
+ * since arguments[0] is function i.e. [callback,2,3] , so callback is scoped inside array which is object, so this.length will be length of array
+ */
+
+// Q - Write a function for below calculations
+
+// const result = calc.add(10).multiply(5).subtract(30).add(10);
+// console.log(result.total);
+
+const calculate = {
+  total: 0,
+  add(b) {
+    this.total += +b;
+    return this;
+  },
+  multiply(c) {
+    this.total *= c;
+    return this;
+  },
+  subtract(d) {
+    this.total -= d;
+    return this;
+  },
+};
+
+const result1 = calculate.add(10).multiply(5).subtract(30).add(10);
+console.log(result1.total);
