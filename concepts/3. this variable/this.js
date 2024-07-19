@@ -229,7 +229,7 @@ object.method(callback, 2, 3);
 const calculate = {
   total: 0,
   add(b) {
-    this.total += +b;
+    this.total += b;
     return this;
   },
   multiply(c) {
