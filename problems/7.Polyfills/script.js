@@ -60,3 +60,82 @@ Array.prototype.myReduce = function (cb, initialVal) {
 
 let newVal = list.reduce((acc, item) => acc + item, 0);
 console.log("myReduce", newVal);
+
+// Polyfill for call , apply and bind
+
+// Polyfill for call
+// call(this, arg1, arg2, arg3....., argN)
+
+let car = {
+  name: "Maruti",
+  getName: function (color) {
+    console.log(`Car name is ${this.name} and car color is ${color}`);
+  },
+};
+
+let anotherCar = {
+  name: "Honda",
+};
+// car.getName.call(anotherCar, "red");
+
+function getYear(year, color) {
+  console.log(
+    `Year of manufacture of ${this.name} is ${year} and color is ${color}`
+  );
+}
+// getYear.call(anotherCar, 2005, "red");
+// getYear.apply(anotherCar, [2005, 'blue'])
+const boundFunc = getYear.bind(anotherCar, 2007, "green");
+console.log(boundFunc);
+
+// Polyfill
+
+Function.prototype.myCall = function (context = {}, ...args) {
+  if (typeof this !== "function") {
+    throw new Error(this + "Its not callable");
+  }
+  console.log(...args);
+  // this - points to function getYear
+  context.fn = this; // we are attaching function to object's property
+  context.fn(...args); // calling the attached function with arguments
+};
+
+getYear.myCall(anotherCar, 1980, "red");
+
+// Polyfill for apply
+// apply(this, [arg1, arg2,... argN])
+Function.prototype.myApply = function (context = {}, args = []) {
+  if (typeof this !== "function") {
+    throw new Error(this + "Its not callable");
+  }
+
+  if (!Array.isArray(args)) {
+    throw new Error(args + " is not an array");
+  }
+
+  context.fn = this;
+  context.fn(...args);
+};
+
+// getYear.apply(anotherCar, [1980, "red"]);
+
+getYear.myApply(anotherCar, [2004, "blue"]);
+
+// Polyfill for bind
+// bind(this, arg1, arg2, ... , argN)
+
+Function.prototype.myBind = function (context = {}, ...args) {
+  if (typeof this !== "function") {
+    throw new Error(this + "Can't be bound as its not callable");
+  }
+
+  context.fn = this;
+  return function (...otherArgs) {
+    // otherArgs is applicable when arguments are passed in the myBoundFunc after creation and not with context.
+    return context.fn(...args, ...otherArgs);
+  };
+};
+
+const myBoundFunc = getYear.myBind(anotherCar, 2010, "green");
+console.log(myBoundFunc);
+myBoundFunc();
