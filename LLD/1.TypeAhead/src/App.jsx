@@ -23,9 +23,10 @@ function App() {
         placeholder="Enter your favourite character here.."
         autoComplete
         debounceDelay={400}
-        listItemRender={(items, activeIndex, onClickHandler) => (
+        listItemRender={(items, activeIndex, searchText, onClickHandler) => (
           <ListBox
             items={items}
+            searchText={searchText}
             activeIndex={activeIndex}
             onClickHandler={onClickHandler}
           />

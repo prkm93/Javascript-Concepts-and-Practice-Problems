@@ -27,3 +27,7 @@
   outline: none;
   padding: 5px;
 }
+
+.highlight {
+  color: rgb(9, 216, 54);
+}

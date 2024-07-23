@@ -96,7 +96,7 @@ const SearchBox = (props) => {
         <>
           {userList &&
             userList.length > 0 &&
-            listItemRender(userList, activeIndex, onClickHandler)}
+            listItemRender(userList, activeIndex, searchText, onClickHandler)}
           {searchText.length > 0 && userList?.length === 0 && noItemMsg()}
           {error && errorMsg()}
         </>
