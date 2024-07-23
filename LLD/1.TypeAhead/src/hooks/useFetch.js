@@ -1,22 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const API_URL = "https://swapi.dev/api/people";
-
-export const useFetch = (searchText) => {
-  const [userList, setUserList] = useState([]);
+export const useFetch = (
+  promise,
+  searchText,
+  transformData,
+  debounceDelay,
+  autoComplete
+) => {
+  const [userList, setUserList] = useState(null);
   const timer = useRef(null);
   const [error, setError] = useState("");
 
   const fetchList = async () => {
     try {
-      const response = await fetch(`${API_URL}?search=${searchText}`);
-      if (response.status === 200) {
-        const data = await response.json();
-
-        if (data.results.length > 0) {
-          setUserList(data.results);
-        }
-      }
+      const response = await promise(searchText);
+      const data = await response.json();
+      setUserList(transformData(data));
     } catch (err) {
       console.error(err);
       setError(err);
@@ -24,18 +23,24 @@ export const useFetch = (searchText) => {
   };
 
   useEffect(() => {
+    if (!autoComplete) {
+      return;
+    }
     if (searchText.length > 0) {
       timer.current = setTimeout(() => {
         fetchList();
-      }, 500);
+      }, debounceDelay);
     }
 
-    if (searchText.length === 0) {
-      setUserList([]);
+    if (!searchText) {
+      setUserList(null);
+      setError("");
     }
 
-    return () => clearTimeout(timer.current);
-  }, [searchText]);
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, [searchText, autoComplete]);
 
   return [userList, setUserList, error];
 };

@@ -2,8 +2,17 @@ import SearchBox from "./components/SearchBox";
 import ListBox from "./components/ListBox";
 import "./App.css";
 
+const API_URL = "https://swapi.dev/api/people";
+
 function App() {
   document.title = "TypeAhead/AutoComplete";
+
+  const dataPromise = async (query) => {
+    return await fetch(`${API_URL}?search=${query}`);
+  };
+
+  const transformData = (data) => data.results;
+
   return (
     <div>
       <SearchBox
@@ -12,11 +21,19 @@ function App() {
         id="username"
         name="username"
         placeholder="Enter your favourite character here.."
-        autoComplete={true}
-        debounceDelay={500}
-        listItemRender={(items) => <ListBox items={items} />}
+        autoComplete
+        debounceDelay={400}
+        listItemRender={(items, activeIndex, onClickHandler) => (
+          <ListBox
+            items={items}
+            activeIndex={activeIndex}
+            onClickHandler={onClickHandler}
+          />
+        )}
         noItemMsg={() => <div>No users found!</div>}
         errorMsg={() => <div>Something went wrong!</div>}
+        promise={dataPromise}
+        transformData={transformData}
       />
     </div>
   );
