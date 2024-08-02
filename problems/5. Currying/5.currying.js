@@ -43,7 +43,7 @@ const curriedTotal = curry(totalSum);
 console.log(curriedTotal(1)(2)(3));
 
 /**
- *  Ques
+ *  Ques write a curry function for below
  *  evaluate("sum")(4)(2) => 6
  *  evaluate("multiply")(4)(2) => 8
  *  evaluate("divide")(4)(2) => 2
@@ -65,3 +65,27 @@ console.log(evaluate("sum")(4)(2));
 console.log(evaluate("multiply")(4)(2));
 console.log(evaluate("divide")(4)(2));
 console.log(evaluate("subtract")(4)(2));
+
+/**
+ * curry() implementation
+ * converts f(a,b,c,d) into f(a)(b)(c)(d)
+ */
+
+function curry(func) {
+  return function curriedFunc(...args) {
+    console.log("args.length", args.length);
+    console.log("func.length", func.length);
+    if (args.length >= func.length) {
+      return func(...args);
+    } else {
+      return function (...next) {
+        return curriedFunc(...args, ...next);
+      };
+    }
+  };
+}
+
+const sum = (a, b, c, d) => a + b + c + d;
+
+const totalCurriedSum = curry(sum);
+console.log(totalCurriedSum(1)(2)(3)(4));
