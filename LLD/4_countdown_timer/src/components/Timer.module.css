@@ -28,6 +28,12 @@
   font-size: 1.8rem;
 }
 
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .input_disable {
   color: gray;
 }

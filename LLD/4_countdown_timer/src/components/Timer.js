@@ -6,18 +6,31 @@ const Timer = () => {
   const [hour, setHour] = useState("00");
   const [minute, setMinute] = useState("00");
   const [second, setSecond] = useState("00");
-  const [timerStart, setTimerStart] = useState(false);
+  const [timerStart, setTimerStart] = useState("stop");
   const hourRef = useRef(null);
   const minuteRef = useRef(null);
   const secondRef = useRef(null);
+
+  document.title = "CountDown Timer";
 
   const isTimerZero =
     Number(hour) === 0 && Number(minute) === 0 && Number(second) === 0;
 
   const calcMinutes = (min) => {
-    if (Number(min) > 59) {
-      setHour(Math.floor(Number(min) / 60));
-      setMinute(Number(min) % 60);
+    setHour(Number(hour) + Math.floor(Number(min) / 60));
+    setMinute(Number(min) % 60);
+  };
+
+  const calculateSeconds = (sec) => {
+    if (Number(sec) > 59) {
+      const calcMinute = Number(minute) + Math.floor(Number(sec) / 60);
+      const calcSecond = Number(sec) % 60;
+      setSecond(calcSecond);
+      setMinute(calcMinute);
+
+      if (calcMinute > 59) {
+        calcMinutes(calcMinute);
+      }
     }
   };
 
@@ -26,41 +39,41 @@ const Timer = () => {
       return;
     }
 
-    calcMinutes(minute);
+    if (minute > 59) {
+      calcMinutes(minute);
+    }
 
-    if (Number(second) > 59) {
-      const calcMinute = Math.floor(Number(second) / 60);
-      const calcSecond = Number(second) % 60;
-      setMinute(calcMinute);
-      setSecond(calcSecond);
-
-      if (calcMinute > 59) {
-        calcMinutes(calcMinute);
-      }
+    if (second > 59) {
+      calculateSeconds(second);
     }
 
     if (second >= 0) {
-      setTimerStart(true);
+      setTimerStart("start");
       secondRef.current = setInterval(() => {
         setSecond((prevVal) => prevVal - 1);
       }, 1000);
     }
 
     if (minute >= 0 && Number(second) === 0) {
-      setTimerStart(true);
+      setTimerStart("start");
       setMinute((prevVal) => prevVal - 1);
       setSecond(59);
     }
 
     if (hour >= 0 && Number(minute) === 0 && Number(second) === 0) {
-      setTimerStart(true);
+      setTimerStart("start");
       setHour((prevVal) => prevVal - 1);
       setMinute(59);
       setSecond(59);
     }
   };
 
-  //Number(hour) === 0 && Number(minute) === 0 && Number(second) === 0
+  const handlePause = () => {
+    clearInterval(minuteRef.current);
+    clearInterval(secondRef.current);
+    clearInterval(hourRef.current);
+    setTimerStart("pause");
+  };
 
   const handleReset = () => {
     setHour("00");
@@ -76,7 +89,7 @@ const Timer = () => {
       clearInterval(secondRef.current);
       clearInterval(minuteRef.current);
       clearInterval(hourRef.current);
-      setTimerStart(false);
+      setTimerStart("stop");
       setHour("00");
       setMinute("00");
       setSecond("00");
@@ -111,8 +124,11 @@ const Timer = () => {
             className={`${styles.input} ${isTimerZero && styles.input_disable}`}
             type="number"
             min={0}
+            maxLength={2}
             value={hour < 10 ? hour.toString().padStart(2, 0) : hour}
-            onChange={(e) => setHour(e.target.value)}
+            onChange={(e) => {
+              setHour(Number(e.target.value));
+            }}
           />
           <div>:</div>
         </div>
@@ -122,6 +138,7 @@ const Timer = () => {
             type="number"
             min={0}
             max={59}
+            maxLength={2}
             value={minute < 10 ? minute.toString().padStart(2, 0) : minute}
             onChange={(e) => setMinute(e.target.value)}
           />
@@ -133,22 +150,29 @@ const Timer = () => {
             type="number"
             min={0}
             max={59}
+            maxLength={2}
             value={second < 10 ? second.toString().padStart(2, 0) : second}
             onChange={(e) => setSecond(e.target.value)}
           />
         </div>
       </div>
       <div className={styles.btn_group}>
-        {!timerStart ? (
+        {timerStart === "stop" ? (
           <button
             className={`${styles.btn} ${styles.btn_start}`}
             onClick={handleStart}>
             Start
           </button>
+        ) : timerStart === "pause" ? (
+          <button
+            className={`${styles.btn} ${styles.btn_start}`}
+            onClick={handleStart}>
+            Continue
+          </button>
         ) : (
           <button
             className={`${styles.btn} ${styles.btn_pause}`}
-            onClick={handleStart}>
+            onClick={handlePause}>
             Pause
           </button>
         )}
