@@ -1,0 +1,70 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 150%;
+}
+
+.container {
+  display: grid;
+  width: 18rem;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: 1.5rem;
+  text-align: center;
+  margin-right: 5rem;
+}
+
+.timer_label {
+  font-size: 1.8rem;
+}
+.input {
+  width: 6rem;
+  /* margin: 1rem 0; */
+  outline: none;
+  border: none;
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.input_disable {
+  color: gray;
+}
+
+.value_section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.btn_group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 22rem;
+  margin: 1rem;
+}
+
+.btn {
+  width: 100%;
+  margin: 1rem auto;
+  font-size: 1.4rem;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn_start {
+  background-color: rgb(3, 172, 3);
+}
+
+.btn_pause {
+  background-color: orange;
+}
+.btn_reset {
+  background-color: rgb(223, 37, 4);
+}

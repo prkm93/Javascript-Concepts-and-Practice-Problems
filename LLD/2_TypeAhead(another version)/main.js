@@ -17,7 +17,10 @@ const listItemsBox = document.getElementById("list-box");
 
 // results();
 console.log(listItemsBox);
-const handleSearch = (e) => {
+
+const handleSearch = (word) => {};
+
+const handleInputChange = (e) => {
   console.log(e.target.value);
   const word = e.target.value;
   fakeFetch("https://example.com/api/states")
@@ -32,4 +35,4 @@ const handleSearch = (e) => {
     .catch((error) => console.error(error));
 };
 
-searchBox.addEventListener("input", handleSearch);
+searchBox.addEventListener("input", handleInputChange);
