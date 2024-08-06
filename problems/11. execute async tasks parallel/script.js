@@ -47,4 +47,21 @@ async function asyncParallel(tasks, callback) {
   callback(errors, results);
 }
 
+// solution
+function asyncParallel2(tasks, callback) {
+  let results = [],
+    errors = [],
+    completed = 0;
+  tasks.forEach((item) => {
+    item
+      .then((res) => results.push(res))
+      .catch((err) => errors.push(err))
+      .finally(() => {
+        completed++;
+        if (completed === tasks.length) {
+          callback(errors, results);
+        }
+      });
+  });
+}
 // when running in parallel, it will output the tasks only after the longest promise finished execution but all promises were started simultaneously.
