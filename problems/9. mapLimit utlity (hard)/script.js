@@ -13,47 +13,50 @@
 function getNameById(id, callback) {
   // simulating async request
   const randomRequestTime = Math.floor(Math.random() * 1000) + 2000;
-
+  console.log("id settimeout", id, randomRequestTime);
   setTimeout(() => {
     callback("User" + id);
   }, randomRequestTime);
 }
 
 // example:
-mapLimit([1, 2, 3, 4, 5], 2, getNameById, (allResults) => {
+mapLimit([1, 2, 3, 4, 5, 6, 7, 8], 3, getNameById, (allResults) => {
   console.log("allResults", allResults);
-  ["User 1", "User 2", "User 3", "User 4", "User 5"];
+  ["User 1", "User 2", "User 3", "User 4", "User 5"]; // depends on which order batched promises are executed
 });
 
 // Solution
-
 async function mapLimit(inputs, limit, iterateeFn, callback) {
   // implement here
 
   // get chopped array
   const choppedList = partitionedArray(inputs, limit);
 
-  // creating promise and iterating over array
-  var newList = choppedList.map((batch) => {
-    return new Promise((resolve, reject) => {
-      let temp = [];
-
-      // iterating of batched elements
-      batch.forEach((item) => {
-        iterateeFn(item, (result) => {
-          temp = [...temp, result];
-          console.log("temp", temp);
-          // resolve the promise only once all the batch elements are iterated through async function
-          if (temp.length === batch.length) {
-            resolve(temp);
-          }
+  let newList = [];
+  for (let batch of choppedList) {
+    try {
+      let response = await new Promise((resolve, reject) => {
+        let temp = [];
+        batch.forEach((item) => {
+          iterateeFn(item, (result) => {
+            temp.push(result);
+            if (temp.length === batch.length) {
+              resolve(temp);
+            }
+          });
         });
       });
-    });
-  });
+      console.log("response", response);
+      newList = [...newList, ...response];
 
-  const response = await Promise.all(newList);
-  callback(response.flat(1));
+      callback(newList);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // const response = await Promise.all(finalList);
+  // callback(response.flat(1));
 }
 
 // create partioned array based on limit
@@ -73,23 +76,30 @@ function partitionedArray(inputs, limit) {
 //   // ["User 1", "User 2", "User 3", "User 4", "User 5"];
 // });
 
+// another method
 function mapLimit2(inputs, limit, iterateeFn, callback) {
   const choppedList = partitionedArray(inputs, limit);
 
   let finalResult = choppedList.reduce((prev, current) => {
+    console.log("prev", prev);
     return prev.then((val) => {
-      return new Promise((resolve, reject) => {
+      console.log("val", val);
+      const promise = new Promise((resolve, reject) => {
         let temp = [];
         current.forEach((elem) => {
           iterateeFn(elem, (result) => {
+            console.log("result", result);
             temp.push(result);
             console.log("temp", temp);
             if (temp.length === current.length) {
+              console.log("val temp", [...val, ...temp]);
               resolve([...val, ...temp]);
             }
           });
         });
       });
+      console.log("promise", promise);
+      return promise;
     });
   }, Promise.resolve([]));
   console.log("finalResult", finalResult);

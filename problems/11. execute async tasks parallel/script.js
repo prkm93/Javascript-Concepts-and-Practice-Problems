@@ -1,5 +1,5 @@
 /**
- * Execute async tasks in sequence
+ * Execute async tasks in parallel
  * Complete asyncSequence function . Error will have count of failed promises and result will have count of passed promises.
  * Both should give output of failed and passed promises as well.
  */
