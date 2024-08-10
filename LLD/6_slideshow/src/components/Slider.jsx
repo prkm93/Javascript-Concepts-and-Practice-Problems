@@ -2,8 +2,9 @@ import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import PropTypes from "prop-types";
 
-import styles from "./Slider.module.css";
 import Slide from "./Slide";
+import Dots from "./Dots";
+import styles from "./Slider.module.css";
 
 const Slider = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -35,11 +36,6 @@ const Slider = ({ images }) => {
               <Slide key={index} {...image} active={index === currentIndex} />
             );
           })}
-          {/* <Slide
-          image={images[currentIndex]}
-          onPrevClick={handleClickPrev}
-          onNextClick={handleClickNext}
-        /> */}
           <button className={styles.left_icon} onClick={handleClickPrev}>
             <FaChevronLeft />
           </button>
@@ -47,19 +43,11 @@ const Slider = ({ images }) => {
             <FaChevronRight />
           </button>
         </div>
-        <div className={styles.slide_indicators}>
-          {images.map((_, index) => {
-            return (
-              <div
-                key={index}
-                className={`${
-                  currentIndex === index ? styles.slide_indicator_active : ""
-                } ${styles.slide_indicator}`}
-                onClick={() => setCurrentIndex(index)}
-              />
-            );
-          })}
-        </div>
+        <Dots
+          images={images}
+          currentIndex={currentIndex}
+          setCurrentIndex={setCurrentIndex}
+        />
       </div>
     </div>
   );
