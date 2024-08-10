@@ -1,25 +1,28 @@
 import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import PropTypes from "prop-types";
 
 import styles from "./Slider.module.css";
-import { images } from "../data";
+import Slide from "./Slide";
 
-const Slider = () => {
+const Slider = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleClickLeft = () => {
-    if (0 === currentIndex) {
-      setCurrentIndex(images.length - 1);
-    } else {
+  const handleClickPrev = () => {
+    if (currentIndex > 0) {
       setCurrentIndex((index) => index - 1);
+    }
+    if (currentIndex === 0) {
+      setCurrentIndex(images.length - 1);
     }
   };
 
-  const handleClickRight = () => {
-    if (images.length - 1 === currentIndex) {
-      setCurrentIndex(0);
-    } else {
+  const handleClickNext = () => {
+    if (currentIndex < images.length - 1) {
       setCurrentIndex((index) => index + 1);
+    }
+    if (currentIndex === images.length - 1) {
+      setCurrentIndex(0);
     }
   };
 
@@ -27,15 +30,20 @@ const Slider = () => {
     <div className={styles.slide_wrapper}>
       <div className={styles.slide_container}>
         <div className={styles.slide_img_section}>
-          <img
-            className={styles.slide_img}
-            src={images[currentIndex].image_url}
-            alt={images[currentIndex].caption}
-          />
-          <button className={styles.left_icon} onClick={handleClickLeft}>
+          {images.map((image, index) => {
+            return (
+              <Slide key={index} {...image} active={index === currentIndex} />
+            );
+          })}
+          {/* <Slide
+          image={images[currentIndex]}
+          onPrevClick={handleClickPrev}
+          onNextClick={handleClickNext}
+        /> */}
+          <button className={styles.left_icon} onClick={handleClickPrev}>
             <FaChevronLeft />
           </button>
-          <button className={styles.right_icon} onClick={handleClickRight}>
+          <button className={styles.right_icon} onClick={handleClickNext}>
             <FaChevronRight />
           </button>
         </div>
@@ -47,7 +55,8 @@ const Slider = () => {
                 className={`${
                   currentIndex === index ? styles.slide_indicator_active : ""
                 } ${styles.slide_indicator}`}
-                onClick={() => setCurrentIndex(index)}></div>
+                onClick={() => setCurrentIndex(index)}
+              />
             );
           })}
         </div>
@@ -57,3 +66,7 @@ const Slider = () => {
 };
 
 export default Slider;
+
+Slider.propTypes = {
+  images: PropTypes.array,
+};

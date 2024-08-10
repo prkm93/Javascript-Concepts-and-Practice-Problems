@@ -12,14 +12,8 @@
 
 .slide_img_section {
   width: 70vw;
-  height: 40vw;
+  height: 45vw;
   position: relative;
-}
-
-.slide_img {
-  width: 100%;
-  height: 100%;
-  filter: brightness(70%);
 }
 
 .left_icon,
@@ -31,6 +25,7 @@
   text-align: center;
   border: none;
   background-color: transparent;
+  transition: all 0.2s ease;
 }
 
 .left_icon {
@@ -44,7 +39,7 @@
 .slide_indicators {
   display: flex;
   gap: 1rem;
-  margin: 1rem;
+  margin-top: 1rem;
 }
 
 .slide_indicator {

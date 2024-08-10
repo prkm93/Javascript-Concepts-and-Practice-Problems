@@ -1,12 +1,11 @@
-import { useState } from "react";
-
 import "./App.css";
 import Slider from "./components/Slider";
+import { images } from "./data";
 
 function App() {
   return (
     <>
-      <Slider />
+      <Slider images={images} />
     </>
   );
 }
