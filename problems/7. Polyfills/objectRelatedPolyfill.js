@@ -51,7 +51,7 @@ e: 50
 }
 
 Object.customAssign = function(target, ...sources) {
-	if (target === null || target === 'undefined') {
+  if (target === null || target === 'undefined') {
   	throw new TypeError('Cannot convert undefined or null to object');
   }
   const assignedObj = Object(target);
