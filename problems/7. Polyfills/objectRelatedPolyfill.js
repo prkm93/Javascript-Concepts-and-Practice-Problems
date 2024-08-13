@@ -2,7 +2,7 @@
  Write a polyfill for Object.create
 */
 
-const obj1 = {
+var obj1 = {
   a: 10,
   value(){
     console.log("Value is ", this.a);
@@ -28,3 +28,44 @@ Object.customCreate = function(proto, propertiesObject) {
   }
   return obj;
 }
+
+var newObj = Object.customCreate(obj1);
+console.log("newObj",newObj);
+
+/**
+ Write a polyfill for Object.assign
+*/
+
+var obj1 = {
+ a: 10,
+};
+
+var obj2 = {
+ b: 20
+};
+
+var obj3 = {
+b: 60,
+d: 40,
+e: 50
+}
+
+Object.customAssign = function(target, ...sources) {
+	if (target === null || target === 'undefined') {
+  	throw new TypeError('Cannot convert undefined or null to object');
+  }
+  const assignedObj = Object(target);
+
+  sources.forEach(source => {
+   if (source !== null && source !== 'undefined') {
+   	 for (let key in source) {
+     	assignedObj[key] = source[key];
+     }
+   }
+  });
+  
+  return assignedObj;
+}
+
+var newResult = Object.customAssign(obj1, obj2, obj3);
+console.log("newResult", newResult);
