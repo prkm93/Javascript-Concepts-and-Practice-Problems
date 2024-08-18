@@ -1,4 +1,3 @@
-import "./App.css";
 import Slider from "./components/Slider";
 import { images } from "./data";
 
