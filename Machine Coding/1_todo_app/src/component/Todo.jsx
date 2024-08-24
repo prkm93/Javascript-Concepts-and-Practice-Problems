@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import { v4 as uuid } from "uuid";
 import styles from "./Todo.module.css";
+import TodoCard from "./TodoCard";
 
 const Todo = ({ todosList }) => {
   const [newTodo, setNewTodo] = useState("");
@@ -41,6 +42,25 @@ const Todo = ({ todosList }) => {
     setTasksList(newList);
   };
 
+  const handleEditTask = (item, editedTodo) => {
+    const newList = tasksList.map((todoItem) => {
+      if (item.id === todoItem.id) {
+        return {
+          ...todoItem,
+          todo: editedTodo,
+        };
+      }
+      return todoItem;
+    });
+
+    setTasksList(newList);
+  };
+
+  const handleDeleteTask = (id) => {
+    const newList = tasksList.filter((item) => item.id !== id);
+    setTasksList(newList);
+  };
+
   return (
     <div className={styles.todo_container}>
       <form onSubmit={handleAddTask} className={styles.form_container}>
@@ -56,22 +76,15 @@ const Todo = ({ todosList }) => {
       </form>
       <ul>
         {tasksList?.map((todoItem) => {
-          const { id, todo, completed } = todoItem;
+          const { id } = todoItem;
           return (
-            <li key={id} className={styles.task_list}>
-              <input
-                type="checkbox"
-                checked={completed}
-                onChange={() => handleToggleTask(id)}
-              />
-              <label
-                htmlFor={todo}
-                className={`${
-                  completed ? styles.todo_task_completed : styles.todo_task
-                }`}>
-                {todo}
-              </label>
-            </li>
+            <TodoCard
+              key={id}
+              item={todoItem}
+              handleDeleteTask={handleDeleteTask}
+              handleEditTask={handleEditTask}
+              handleToggleTask={handleToggleTask}
+            />
           );
         })}
       </ul>
