@@ -1,0 +1,43 @@
+.todo_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.add_btn {
+  padding: 0.8rem 1rem;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border: none;
+}
+
+.form_container {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  padding: 0.6rem 6rem;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border: none;
+  font-size: 1.15rem;
+}
+
+.task_list {
+  list-style-type: none;
+  margin: 0.5rem;
+  font-size: 1.2rem;
+  border: 1px solid gray;
+  padding: 1rem;
+  border-radius: 5px;
+}
+.task_list:hover {
+  background-color: aliceblue;
+  color: #000;
+}
+
+.todo_task_completed {
+  text-decoration: line-through;
+}
