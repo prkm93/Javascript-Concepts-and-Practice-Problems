@@ -18,12 +18,12 @@ const Todo = ({ todosList }) => {
     const newId = uuid();
 
     setTasksList([
-      ...tasksList,
       {
         id: newId,
         todo: newTodo,
         completed: false,
       },
+      ...tasksList,
     ]);
     setNewTodo("");
   };

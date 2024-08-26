@@ -4,7 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Throttle</title>
+    <style>
+      .outer {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        width: 100vw;
+        height: 100vh;
+        background-color: #202123;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .inner {
+        width: 500px;
+        height: 500px;
+        background: #f2f2f2;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <div class="outer">
+      <div class="inner"></div>
+    </div>
+  </body>
   <script src="./throttle.js"></script>
 </html>
