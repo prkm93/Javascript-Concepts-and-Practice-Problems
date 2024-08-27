@@ -153,6 +153,7 @@ const generateRandomNum = getRandomNumber();
 // console.log(popGrocery.next().value);
 // console.log(generateRandomNum.next().value);
 // console.log(generateRandomNum.next().value);
+// console.log(generateRandomNum.next().value);
 
 for (let i = 0; i < 5; i++) {
   console.log(`${generateRandomNum.next().value} ${popGrocery.next().value}`);
