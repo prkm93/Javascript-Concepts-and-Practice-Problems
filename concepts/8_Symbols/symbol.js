@@ -7,3 +7,5 @@ console.log(mySymbol === Symbol()); // false . both are different locations in m
 
 console.log(mySymbol.description); // undefined
 console.log(namedSymbol.description); // monkey
+
+// Symbols aren't strings. They have their own type. Symbol can be used as keys for object.
