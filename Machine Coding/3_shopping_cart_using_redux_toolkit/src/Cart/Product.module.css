@@ -1,0 +1,23 @@
+.product_card {
+  border: 2px solid black;
+  padding: 1rem;
+  width: 20rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product_img_block {
+  width: 10rem;
+  height: fit-content;
+  margin: 1rem auto;
+}
+
+.product_img {
+  width: 100%;
+}
+
+.cart_btn {
+  padding: 0.5rem;
+  margin-top: 1rem;
+}
