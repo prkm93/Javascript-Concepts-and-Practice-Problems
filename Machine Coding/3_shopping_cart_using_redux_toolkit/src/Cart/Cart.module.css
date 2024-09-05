@@ -1,6 +1,24 @@
+.wrapper {
+  display: flex;
+}
+
 .product_container {
   display: flex;
-  justify-content: center;
+  width: 80vw;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.6rem;
+}
+
+.cart_container {
+  width: 20vw;
+  display: flex;
+  justify-content: center;
+}
+
+hr {
+  border: 2px solid rgb(223, 99, 11);
+}
+
+h2 {
+  margin: 0;
 }

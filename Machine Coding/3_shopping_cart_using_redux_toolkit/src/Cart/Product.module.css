@@ -1,7 +1,7 @@
 .product_card {
   border: 2px solid black;
   padding: 1rem;
-  width: 20rem;
+  width: 18rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -15,6 +15,11 @@
 
 .product_img {
   width: 100%;
+}
+
+.product_details {
+  display: flex;
+  justify-content: space-between;
 }
 
 .cart_btn {
