@@ -15,6 +15,7 @@
 
 .product_img {
   width: 100%;
+  height: 12.5rem;
 }
 
 .product_details {
@@ -25,4 +26,16 @@
 .cart_btn {
   padding: 0.5rem;
   margin-top: 1rem;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+  font-size: 1.1rem;
+}
+
+.cart_btn_add {
+  background-color: rgb(3, 195, 3);
+}
+
+.cart_btn_remove {
+  background-color: rgb(247, 53, 53);
 }

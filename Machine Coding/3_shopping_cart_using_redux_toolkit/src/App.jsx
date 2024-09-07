@@ -1,6 +1,7 @@
-import Cart from "./Cart/Cart";
+import Cart from "./components/Cart";
 
 function App() {
+  document.title = "Ecommerce Cart";
   return (
     <>
       <Cart />

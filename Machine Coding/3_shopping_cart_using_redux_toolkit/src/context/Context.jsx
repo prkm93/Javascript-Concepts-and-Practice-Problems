@@ -39,10 +39,14 @@ export const ContextProvider = ({ children }) => {
     }
   };
 
-  console.log("cartState", cartState);
+  const ifProductInCart = (id) => {
+    const itemInCart = cartState.cartList.find((item) => item.id === id);
+    return itemInCart ? true : false;
+  };
 
   return (
-    <CartContext.Provider value={{ cartState, cartDispatch, isLoading }}>
+    <CartContext.Provider
+      value={{ cartState, cartDispatch, isLoading, ifProductInCart }}>
       {children}
     </CartContext.Provider>
   );

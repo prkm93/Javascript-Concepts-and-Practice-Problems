@@ -3,9 +3,9 @@ import { actions } from "../reducer/actions";
 import styles from "./Product.module.css";
 
 const Product = (item) => {
-  const { cartDispatch } = useCartContext();
+  const { ifProductInCart, cartDispatch } = useCartContext();
 
-  const { ADD_TO_CART } = actions;
+  const { ADD_TO_CART, REMOVE_FROM_CART } = actions;
   const { id, title, image, price, rating } = item;
 
   return (
@@ -25,16 +25,31 @@ const Product = (item) => {
           <strong>Rate:</strong> {rating.rate}
         </div>
       </div>
-      <button
-        className={styles.cart_btn}
-        onClick={() => {
-          cartDispatch({
-            type: ADD_TO_CART,
-            payload: item,
-          });
-        }}>
-        Add to Cart
-      </button>
+      {ifProductInCart(id) ? (
+        <button
+          className={`${styles.cart_btn} ${styles.cart_btn_remove}`}
+          onClick={() => {
+            cartDispatch({
+              type: REMOVE_FROM_CART,
+              payload: {
+                id,
+              },
+            });
+          }}>
+          Remove from Cart
+        </button>
+      ) : (
+        <button
+          className={`${styles.cart_btn} ${styles.cart_btn_add}`}
+          onClick={() => {
+            cartDispatch({
+              type: ADD_TO_CART,
+              payload: item,
+            });
+          }}>
+          Add to Cart
+        </button>
+      )}
     </div>
   );
 };
