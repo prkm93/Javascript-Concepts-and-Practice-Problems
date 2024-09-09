@@ -5,6 +5,7 @@ import {
   useReducer,
   useEffect,
 } from "react";
+import PropTypes from "prop-types";
 import { initialState, productReducer } from "../reducer/reducer";
 import { actions } from "../reducer/actions";
 import { fetchProducts } from "../products/product";
@@ -50,4 +51,8 @@ export const ContextProvider = ({ children }) => {
       {children}
     </CartContext.Provider>
   );
+};
+
+ContextProvider.propTypes = {
+  children: PropTypes.node,
 };
