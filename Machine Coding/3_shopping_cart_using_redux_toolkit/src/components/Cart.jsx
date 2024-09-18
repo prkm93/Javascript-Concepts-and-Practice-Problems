@@ -12,10 +12,12 @@ const Cart = () => {
       currency: "INR",
     }).format(amount);
   };
+
   const cartTotalAmount = cartState.cartList.reduce(
     (total, item) => total + item.qty * item.price,
     0
   );
+
   return (
     <div>
       <h1>My Shopping Cart</h1>

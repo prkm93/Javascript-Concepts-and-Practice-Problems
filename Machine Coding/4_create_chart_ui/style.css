@@ -1,0 +1,16 @@
+body {
+  width: 100vw;
+  height: 100vh;
+}
+
+.range {
+  width: 400px;
+}
+
+.piechart {
+  margin: 50px;
+  width: 400px;
+  height: 400px;
+  /* background: conic-gradient(lightgreen 30deg, green 30deg 360deg); */
+  border-radius: 50%;
+}
