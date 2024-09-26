@@ -46,6 +46,9 @@ class MyPromise {
   // resolve
   #onSuccess(val) {
     queueMicrotask(() => {
+      console.log('this #state in onSuccess ', this.#state);
+      console.log('this #value in onSuccess', this.#value);
+
       // means promise already resolved
       // handles Case 3 (resolves only first resolve statement)
       if (this.#state !== STATE.PENDING) return;
@@ -78,6 +81,7 @@ class MyPromise {
         return;
       }
 
+      // if no catch statement provided but there is reject value in promise
       if (this.#catchCallbacks.length === 0) {
         throw new UncaughtPromiseError(val);
       }
@@ -92,18 +96,23 @@ class MyPromise {
   //handles Case 1 and Case 5 (arguments- catchCb and thenCb)
   then(thenCb, catchCb) {
     // handles Case 6(allows chaning of promises)
+
     return new MyPromise((resolve, reject) => {
       // handles Case 2
       // everytime cb pushed in array, later called in onSuccess
       this.#thenCallbacks.push((result) => {
+        console.log('result', result);
         // handles Case 7 (if catch block encounters, then resolve immediately with result value)
         if (thenCb == null) {
           resolve(result);
           return;
         }
 
+        console.log('resolve', resolve);
+        console.log('thenCb', thenCb);
+
         try {
-          // resolve new promise with result of previous promise we called
+          // resolve new promise with returned result of previous promise we called
           resolve(thenCb(result));
         } catch (err) {
           // if error, will go to .catch() with below reject()
@@ -174,17 +183,17 @@ class UncaughtPromiseError extends Error {
 }
 
 // Case 0
-const promise12 = new MyPromise((resolve, reject) => {
-  // Code
-  let a = 2;
+// const promise12 = new MyPromise((resolve, reject) => {
+//   // Code
+//   let a = 2;
 
-  // Case 3 (even if multiple resolve called, once and only 1st will be executed)
-  if (a === 2) {
-    resolve('hi');
-  } else {
-    reject('error');
-  }
-});
+//   // Case 3 (even if multiple resolve called, once and only 1st will be executed)
+//   if (a === 2) {
+//     resolve('hi');
+//   } else {
+//     reject('error');
+//   }
+// });
 
 // promise12.then((res) => console.log(res)).catch((err) => console.error(err));
 
@@ -221,38 +230,39 @@ const promise12 = new MyPromise((resolve, reject) => {
 // promise12.then().finally().then()
 
 // Examples - 1
-const fetchProducts = (url) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (url === 'http://www.shoppingproducts.com/products') {
-        resolve({
-          status: 200,
-          statusText: 'OK',
-          data: [
-            {
-              category: "men's clothing",
-              description:
-                'Your perfect pack for everyday use and walks in the forest.',
-              id: 1,
-              image: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
-            },
-          ],
-        });
-      } else {
-        reject({
-          status: 500,
-          data: 'Something went wrong!',
-        });
-      }
-    }, 1500);
-  });
-};
+// const fetchProducts = (url) => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       if (url === 'http://www.shoppingproducts.com/products') {
+//         resolve({
+//           status: 200,
+//           statusText: 'OK',
+//           data: [
+//             {
+//               category: "men's clothing",
+//               description:
+//                 'Your perfect pack for everyday use and walks in the forest.',
+//               id: 1,
+//               image: 'https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg',
+//             },
+//           ],
+//         });
+//       } else {
+//         reject({
+//           status: 500,
+//           data: 'Something went wrong!',
+//         });
+//       }
+//     }, 1500);
+//   });
+// };
 
 // fetchProducts('http://www.shoppingproducts.com/products')
 //   .then((res) => console.log(res))
 //   .catch((err) => console.er);
 
 /********** EXAMPLE - 2 ********/
+
 const asyncPromise = (a) => {
   return new MyPromise((resolve, reject) => {
     setTimeout(() => {
@@ -265,4 +275,37 @@ const asyncPromise = (a) => {
   });
 };
 
-asyncPromise(3).then((res) => console.log(res));
+// asyncPromise(3)
+//   .then((res) => console.log(res))
+//   .catch((err) => console.error(err));
+
+asyncPromise(2)
+  .then((res) => {
+    console.log(res);
+    return res;
+  })
+  .then((res) => {
+    console.log(res * res);
+    return res * res;
+  })
+  .then((res) => {
+    throw new Error('Erro in 3rd then');
+  })
+  .catch((err) => {
+    console.error(err);
+  })
+  .finally(() => {
+    console.log('in finally');
+  });
+
+// asyncPromise(4)
+//   .then(
+//     (res) => {
+//       console.log(res);
+//       return res;
+//     },
+//     (err) => console.error(err)
+//   )
+//   .then((res) => {
+//     console.log(res * res);
+//   });
