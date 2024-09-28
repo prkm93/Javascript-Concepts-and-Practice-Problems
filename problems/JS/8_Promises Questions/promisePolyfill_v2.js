@@ -46,9 +46,6 @@ class MyPromise {
   // resolve
   #onSuccess(val) {
     queueMicrotask(() => {
-      console.log('this #state in onSuccess ', this.#state);
-      console.log('this #value in onSuccess', this.#value);
-
       // means promise already resolved
       // handles Case 3 (resolves only first resolve statement)
       if (this.#state !== STATE.PENDING) return;
@@ -101,15 +98,12 @@ class MyPromise {
       // handles Case 2
       // everytime cb pushed in array, later called in onSuccess
       this.#thenCallbacks.push((result) => {
-        console.log('result', result);
         // handles Case 7 (if catch block encounters, then resolve immediately with result value)
         if (thenCb == null) {
+          // use == here
           resolve(result);
           return;
         }
-
-        console.log('resolve', resolve);
-        console.log('thenCb', thenCb);
 
         try {
           // resolve new promise with returned result of previous promise we called
@@ -146,6 +140,7 @@ class MyPromise {
   }
 
   // handles Case 9
+  // finally block returns a promise which fails or succeeds with previous promise value
   finally(cb) {
     return this.then(
       (result) => {
@@ -170,6 +165,79 @@ class MyPromise {
   static reject(value) {
     return new MyPromise((resolve, reject) => {
       reject(value);
+    });
+  }
+
+  //************ Promise.all **************/
+  static all(promises) {
+    const results = [];
+    let resolvedPromises = 0;
+
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise, idx) => {
+        promise
+          .then((value) => {
+            results[idx] = value;
+            resolvedPromises++;
+
+            // we resolve promise only if all promises finished executing
+            if (resolvedPromises === promises.length) {
+              resolve(results);
+            }
+          })
+          .catch(reject);
+      });
+    });
+  }
+
+  //*************** Promise.allSettled ***************/
+  static allSettled(promises) {
+    let results = [];
+    let settledPromises = 0;
+
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise, idx) => {
+        promise
+          .then((val) => {
+            results[idx] = { status: STATE.FULFILLED, value: val };
+          })
+          .catch((err) => {
+            results[idx] = { status: STATE.REJECTED, reason: err };
+          })
+          .finally(() => {
+            settledPromises++;
+            if (settledPromises === promises.length) {
+              resolve(results);
+              // we aren't reject method since allSettled never rejects, it will always be resolved
+            }
+          });
+      });
+    });
+  }
+
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise) => {
+        promise.then(resolve).catch(reject);
+      });
+    });
+  }
+
+  static any(promises) {
+    let results = [];
+    let rejectedPromises = 0;
+
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((promise, idx) => {
+        promise.then(resolve).catch((err) => {
+          rejectedPromises++;
+          results[idx] = err;
+
+          if (rejectedPromises === promises.length) {
+            reject(new AggregateError(results, 'All promises were rejected'));
+          }
+        });
+      });
     });
   }
 }
@@ -263,40 +331,40 @@ class UncaughtPromiseError extends Error {
 
 /********** EXAMPLE - 2 ********/
 
-const asyncPromise = (a) => {
-  return new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-      if (a === 2) {
-        resolve(a * a);
-      } else {
-        reject('a not equal to 2');
-      }
-    }, 2000);
-  });
-};
+// const asyncPromise = (a) => {
+//   return new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//       if (a === 2) {
+//         resolve(a * a);
+//       } else {
+//         reject('a not equal to 2');
+//       }
+//     }, 2000);
+//   });
+// };
 
 // asyncPromise(3)
 //   .then((res) => console.log(res))
 //   .catch((err) => console.error(err));
 
-asyncPromise(2)
-  .then((res) => {
-    console.log(res);
-    return res;
-  })
-  .then((res) => {
-    console.log(res * res);
-    return res * res;
-  })
-  .then((res) => {
-    throw new Error('Erro in 3rd then');
-  })
-  .catch((err) => {
-    console.error(err);
-  })
-  .finally(() => {
-    console.log('in finally');
-  });
+// asyncPromise(2)
+//   .then((res) => {
+//     console.log(res);
+//     return res;
+//   })
+//   .then((res) => {
+//     console.log(res * res);
+//     return res * res;
+//   })
+//   .then((res) => {
+//     throw new Error('Erro in 3rd then');
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   })
+//   .finally(() => {
+//     console.log('in finally');
+//   });
 
 // asyncPromise(4)
 //   .then(
@@ -309,3 +377,88 @@ asyncPromise(2)
 //   .then((res) => {
 //     console.log(res * res);
 //   });
+
+// ********** EXAMPLES 3 ***********/
+
+// const promise1 = new MyPromise((resolve, reject) => {
+//   setTimeout(() => {
+//     let a = 3;
+//     if (a === 2) {
+//       resolve(a + a);
+//     } else {
+//       reject('a not equal to 2');
+//     }
+//   }, 2000);
+// });
+
+// promise1
+//   .then((res) => {
+//     console.log(res);
+//     return res * res;
+//   })
+//   // .catch(err => console.error(err))
+//   .then((res) => {
+//     return new MyPromise((resolve, _) => {
+//       setTimeout(() => {
+//         console.log('res * res 1', res);
+//         resolve(res * res);
+//       }, 2000);
+//     });
+//   })
+//   .then((res) => {
+//     return new MyPromise((resolve, _) => {
+//       setTimeout(() => {
+//         console.log('res * res 2', res);
+//         resolve(res * res);
+//       }, 2000);
+//     });
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   })
+//   .then((res) => {
+//     // console.log('res final', res);
+//     setTimeout(() => {
+//       console.log('res final', res);
+//     }, 2000);
+//   })
+//   .finally(() => console.log('finally'));
+
+// ******** Promise all/allSettled/race/any example ***********
+
+const promiseAll1 = new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    // resolve('all 1 success');
+    reject('all 1 failed');
+  }, 1000);
+});
+
+const promiseAll2 = new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    // resolve('all 2 success');
+    reject('all 2 failed');
+  }, 2000);
+});
+
+const promiseAll3 = new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    // resolve('all 3 success');
+    reject('all 3 failed');
+  }, 3000);
+});
+
+// MyPromise.all([promiseAll1, promiseAll2, promiseAll3])
+//   .then((value) => console.log(value))
+//   .catch((err) => console.error(err));
+
+// MyPromise.allSettled([promiseAll1, promiseAll2, promiseAll3])
+//   .then((res) => console.log(res))
+//   .catch((err) => console.error(err));
+
+// MyPromise.race([promiseAll1, promiseAll2, promiseAll3])
+//   .then((res) => console.log(res))
+//   .catch((err) => console.error(err));
+
+MyPromise.any([promiseAll1, promiseAll2, promiseAll3])
+  .then((res) => console.log(res))
+  .catch((err) => console.error(err));
