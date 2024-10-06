@@ -11,6 +11,7 @@ const CHART_DATA = [
     colour: '#1D1E33',
   },
   { id: 'dep-7', name: 'Events', ticketCount: 43, colour: '#E1CC4F' },
+  { id: 'dep-8', name: 'Production', ticketCount: 100, colour: '#103131' },
 ];
 
 export default CHART_DATA;

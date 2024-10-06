@@ -1,18 +1,22 @@
+import { motion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import styles from './Chart.module.css';
 
 const Chart = (props) => {
   return (
-    <div
+    <motion.div
+      initial={{ height: 0 }}
+      animate={{ height: `${props.percTicket * 10}px` }}
+      exit={{ height: 0 }}
+      transition={{ duration: 1 }}
       className={styles.bar}
       style={{
-        height: `${props.percTicket * 10}px`,
         backgroundColor: `${props.colour}`,
       }}>
       <span className={styles.tooltipText}>
-        {props.name}-{props.ticketCount}
+        {props.name} - {props.ticketCount}
       </span>
-    </div>
+    </motion.div>
   );
 };
 

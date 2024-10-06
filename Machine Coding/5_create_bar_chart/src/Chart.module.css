@@ -1,36 +1,29 @@
 .bar {
   color: #fff;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
   margin-right: 0.5rem;
   position: relative;
-  animation: slide-out 1s ease-in-out;
-}
-
-@keyframes slide-out {
-  from {
-    scale: 1 0%;
-  }
-
-  to {
-    scale: 1 100%;
-  }
 }
 
 .tooltipText {
+  display: block;
   position: absolute;
-  visibility: hidden;
+  opacity: 0;
   width: fit-content;
   background-color: black;
   color: #fff;
   z-index: 100;
-  left: -2rem;
-  top: -2rem;
+  top: 0;
+  right: 50%;
+  transform: translate(50%, -120%);
   width: max-content;
   padding: 0.3rem;
   border-radius: 5px;
+  font-size: 0.8rem;
+  transition: opacity 0.4s ease-in-out;
 }
 
 .bar:hover .tooltipText {
-  visibility: visible;
+  opacity: 1;
   cursor: pointer;
 }
