@@ -1,0 +1,16 @@
+.li {
+  list-style-type: none;
+  margin: 10px 0;
+}
+
+.node {
+  display: flex;
+  align-items: center;
+  line-height: 0;
+  gap: 0.4rem;
+}
+
+.linkItem {
+  text-decoration: none;
+  color: #0097e6;
+}
