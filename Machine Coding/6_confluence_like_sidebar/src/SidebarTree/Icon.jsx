@@ -1,17 +1,21 @@
 import PropTypes from 'prop-types';
-import { FaChevronRight, FaChevronDown } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { FaChevronRight } from 'react-icons/fa';
 import { TbPointFilled } from 'react-icons/tb';
 import styles from './Icon.module.css';
 
 const Icon = ({ toggle, hasParentNode, onClick }) => {
   return hasParentNode ? (
-    <span onClick={onClick}>
-      {toggle ? (
-        <FaChevronDown className={styles.icon} />
-      ) : (
-        <FaChevronRight className={styles.icon} />
-      )}
-    </span>
+    <motion.span
+      onClick={onClick}
+      animate={{
+        rotate: toggle ? 90 : 0,
+      }}
+      transition={{
+        duration: 0.3,
+      }}>
+      <FaChevronRight className={styles.icon} />
+    </motion.span>
   ) : (
     <TbPointFilled />
   );

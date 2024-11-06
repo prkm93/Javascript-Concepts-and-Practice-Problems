@@ -37,7 +37,7 @@ const Node = ({ label, link, children }) => {
               },
             }}
             transition={{
-              duration: 0.2,
+              duration: 0.3,
             }}
             initial="collapsed"
             animate="open"

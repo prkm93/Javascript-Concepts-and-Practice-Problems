@@ -1,4 +1,3 @@
-import { motion, AnimatePresence } from 'framer-motion';
 import Node from './Node';
 import styles from './SidebarTree.module.css';
 import PropTypes from 'prop-types';
