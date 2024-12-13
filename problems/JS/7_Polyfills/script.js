@@ -92,13 +92,28 @@ console.log(boundFunc);
 // Polyfill
 
 Function.prototype.myCall = function (context = {}, ...args) {
+  // if this isn't a function throw Type Error
   if (typeof this !== "function") {
     throw new Error(this + "Its not callable");
   }
   console.log(...args);
   // this - points to function getYear
-  context.fn = this; // we are attaching function to object's property
-  context.fn(...args); // calling the attached function with arguments
+
+  // create a function symbol
+  const tempFunc = Symbol('temp');
+
+  // Assign the Symbol to the this context (we are attaching function to object's property)
+  context[tempFunc] = this;
+  // {name: 'Indica', year: 2004, Symbol(temp): ƒ}
+  
+  // invoking the attached function with arguments
+  let result = context[tempFunc](...args);
+
+  // deleting the attached context 
+  delete context[tempFunc];
+
+  // return output
+  return result;
 };
 
 getYear.myCall(anotherCar, 1980, "red");
