@@ -131,8 +131,21 @@ Function.prototype.myApply = function (context = {}, args = []) {
     throw new Error(args + " is not an array");
   }
 
-  context.fn = this;
-  context.fn(...args);
+  // create a function symbol
+  const tempFunc = Symbol('temp');
+
+  // Assign the Symbol to the this context (we are attaching function to object's property)
+  context[tempFunc] = this;
+  // {name: 'Indica', year: 2004, Symbol(temp): ƒ}
+  
+  // invoking the attached function with arguments
+  let result = context[tempFunc](...args);
+
+  // deleting the attached context 
+  delete context[tempFunc];
+
+  // return output
+  return result;
 };
 
 // getYear.apply(anotherCar, [1980, "red"]);
