@@ -65,6 +65,7 @@ console.log("myReduce", newVal);
 
 // Polyfill for call
 // call(this, arg1, arg2, arg3....., argN)
+// call method calls a function with given this value and arguments provided individually. executes the function immediately as soon as it is called.
 
 let car = {
   name: "Maruti",
@@ -104,6 +105,8 @@ getYear.myCall(anotherCar, 1980, "red");
 
 // Polyfill for apply
 // apply(this, [arg1, arg2,... argN])
+// apply method also calls a function with given this value but it accepts an array of arguments. executes the function immediately as soon as it is called.
+
 Function.prototype.myApply = function (context = {}, args = []) {
   if (typeof this !== "function") {
     throw new Error(this + "Its not callable");
@@ -123,6 +126,8 @@ getYear.myApply(anotherCar, [2004, "blue"]);
 
 // Polyfill for bind
 // bind(this, arg1, arg2, ... , argN)
+// bind method creates a new bound function and when it's called it sets this value of the object as 1st argument on which it is called upon and accepts normal arguments
+// if additional parameters are passed.
 
 Function.prototype.myBind = function (context = {}, ...args) {
   if (typeof this !== "function") {
