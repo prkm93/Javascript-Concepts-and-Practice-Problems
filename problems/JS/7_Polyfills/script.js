@@ -65,6 +65,7 @@ console.log("myReduce", newVal);
 
 // Polyfill for call
 // call(this, arg1, arg2, arg3....., argN)
+// call method calls a function with given this value and arguments provided individually. executes the function immediately as soon as it is called.
 
 let car = {
   name: "Maruti",
@@ -91,19 +92,36 @@ console.log(boundFunc);
 // Polyfill
 
 Function.prototype.myCall = function (context = {}, ...args) {
+  // if this isn't a function throw Type Error
   if (typeof this !== "function") {
     throw new Error(this + "Its not callable");
   }
   console.log(...args);
   // this - points to function getYear
-  context.fn = this; // we are attaching function to object's property
-  context.fn(...args); // calling the attached function with arguments
+
+  // create a function symbol
+  const tempFunc = Symbol('temp');
+
+  // Assign the Symbol to the this context (we are attaching function to object's property)
+  context[tempFunc] = this;
+  // {name: 'Indica', year: 2004, Symbol(temp): ƒ}
+  
+  // invoking the attached function with arguments
+  let result = context[tempFunc](...args);
+
+  // deleting the attached context 
+  delete context[tempFunc];
+
+  // return output
+  return result;
 };
 
 getYear.myCall(anotherCar, 1980, "red");
 
 // Polyfill for apply
 // apply(this, [arg1, arg2,... argN])
+// apply method also calls a function with given this value but it accepts an array of arguments. executes the function immediately as soon as it is called.
+
 Function.prototype.myApply = function (context = {}, args = []) {
   if (typeof this !== "function") {
     throw new Error(this + "Its not callable");
@@ -113,8 +131,21 @@ Function.prototype.myApply = function (context = {}, args = []) {
     throw new Error(args + " is not an array");
   }
 
-  context.fn = this;
-  context.fn(...args);
+  // create a function symbol
+  const tempFunc = Symbol('temp');
+
+  // Assign the Symbol to the this context (we are attaching function to object's property)
+  context[tempFunc] = this;
+  // {name: 'Indica', year: 2004, Symbol(temp): ƒ}
+  
+  // invoking the attached function with arguments
+  let result = context[tempFunc](...args);
+
+  // deleting the attached context 
+  delete context[tempFunc];
+
+  // return output
+  return result;
 };
 
 // getYear.apply(anotherCar, [1980, "red"]);
@@ -123,6 +154,8 @@ getYear.myApply(anotherCar, [2004, "blue"]);
 
 // Polyfill for bind
 // bind(this, arg1, arg2, ... , argN)
+// bind method creates a new bound function and when it's called it sets this value of the object as 1st argument on which it is called upon and accepts normal arguments
+// if additional parameters are passed.
 
 Function.prototype.myBind = function (context = {}, ...args) {
   if (typeof this !== "function") {
